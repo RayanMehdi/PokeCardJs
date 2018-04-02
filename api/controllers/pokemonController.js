@@ -68,47 +68,8 @@ exports.pokemon = function(req, res) {
     request.end();
 }
 
-exports.collection = function(req, res) {
-    var loginUser = req.body.login; // POST
-    //var loginUser = req.params.login; // GET
 
-    connection.query('SELECT id_pokemon FROM Collection_User WHERE login_user LIKE "' + loginUser + '" ORDER BY id_pokemon', function(error, results, fields) {
-        if(error){
-            res.json({ response: false });
-        }
-        else if(results.length > 0) {
 
-            var options = "https://pokeapi.co/api/v2/pokedex/1/"; //pokedex national
-
-            var data = "";
-            var response = [];
-            var request = https.get(options, (result) => {
-                result.on('data', (d) => {
-                data += d;
-        });
-            result.on('end', function() {
-                var infoPokemon = JSON.parse(data);
-                for(var i=0;i<results.length;i++){
-                    var pkmnTmp = {
-                        "id_pokemon":results[i].id_pokemon,
-                        "name_pokemon": infoPokemon.pokemon_entries[results[i].id_pokemon-1].pokemon_species.name,
-                        "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+results[i].id_pokemon+".png"
-                    };
-                    response.push(pkmnTmp);
-                }
-                res.json(response);
-            });
-        });
-            request.on('error', (e) => {
-                console.error(e);
-        });
-            request.end();
-        }
-        else {
-            res.json([]);
-        }
-    });
-};
 
 
 /*public function getUsersPokemon(Request $request, Application $app)
