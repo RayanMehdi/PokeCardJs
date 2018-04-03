@@ -75,3 +75,44 @@ exports.login = function (req, res) {
     });
     res.json({response: true});
 }
+
+exports.usersPokemon = function(req, res) {
+
+    var tokenFB = req.params.tokenFB;
+
+    connection.query('SELECT pokemonId FROM UsersPokemon WHERE tokenFB LIKE "' + tokenFB + '" ORDER BY pokemonId', function(error, results, fields) {
+        if(error){
+            res.json({ response: false });
+        }
+        else if(results.length > 0) {
+
+            var options = "https://pokeapi.co/api/v2/pokemon/?limit=1000&offset=0"; //Access to every Pokemons
+
+            var data = "";
+            var response = [];
+            var request = https.get(options, (result) => {
+                result.on('data', (d) => {
+                data += d;
+        });
+            result.on('end', function() {
+                var infoPokemon = JSON.parse(data);
+                for(var i=0;i<results.length;i++){
+
+                    var tmp = {"idPoke":results[i].pokemonId,
+                        "name": infoPokemon.results[results[i].pokemonId - 1].name,
+                        "icon": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+results[i].pokemonId+".png"};
+                    response.push(tmp);
+                }
+                res.json(response);
+            });
+        });
+            request.on('error', (e) => {
+                console.error(e);
+        });
+            request.end();
+        }
+        else {
+            res.json([]);
+        }
+    });
+};

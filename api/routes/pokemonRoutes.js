@@ -8,9 +8,9 @@ module.exports = function(app) {
     //Get every pokemons
     app.route('/list').get(pokemonController.list);
     //Details for 1 pokemon
-    app.route('/pokemon/:idPoke').get(pokemonController.pokemon);//Details for 1 pokemon
+    app.route('/pokemon/:idPoke').get(pokemonController.pokemon);
     //Get user's pokemon List
-    //app.route('/usersPokemon/:tokenFB').get(pokemonController.usersPokemon);
+    app.route('/usersPokemon/:tokenFB').get(userController.usersPokemon);
 
 
     //USERS ROUTES
