@@ -70,10 +70,11 @@ exports.login = function (req, res) {
                 }
                 ;
             });
+            res.json({response: true});
         }
         ;
     });
-    res.json({response: true});
+
 }
 
 exports.usersPokemon = function(req, res) {
