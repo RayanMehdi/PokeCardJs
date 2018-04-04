@@ -11,61 +11,62 @@ var connection = mysql.createConnection({
 });
 
 exports.list = function(req, res) {
-    var offset = req.params.offset;
-    var options = "https://pokeapi.co/api/v2/pokemon/?limit=20&offset="+offset+"/";
+
+    var options = "https://pokeapi.co/api/v2/pokemon/?limit=1000&offset=0"; //Access to every Pokemons
 
     var data = "";
-    var response ={};
-    var pokemons = [];
-    var urls = [];
-    var pokemon =[];
-    var infoPokemon;
-    var requestUrls = https.get(options, (result) => {result.on('data', (d) => {data += d;});
-
-
+    var response = [];
+    var request = https.get(options, (result) => {
+        result.on('data', (d) => {
+        data += d;
+});
     result.on('end', function() {
-        var prev = parseInt(offset)-20;
-        var next = parseInt(offset)+20;
-        if(prev <= 0) {
-            response.previous = "http://localhost:3000/list/" + 0 + "/";
-        }else{
-            response.previous = "http://localhost:3000/list/" + prev + "/";
+        var infoPokemon = JSON.parse(data);
+        for(var i=0;i<infoPokemon.count;i++){
+            var id = i+1;
+            var tmp = {"idPoke":id, "name": infoPokemon.results[i].name, "icon": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id+".png"};
+            response.push(tmp);
         }
-        if(next >= 930) {
-            response.next = "http://localhost:3000/list/" + 930 + "/";
-        }else{
-            response.next = "http://localhost:3000/list/" + next + "/";
-        }
-
-        var infoUrl = JSON.parse(data);
-        //console.log(infoUrl);
-        for(var i=0;i<20;i++){
-            var id_pkmn = i+parseInt(offset);
-            //recupération du des urls ici TODO: Création model
-            var urlTmp = {"url": infoUrl.results[id_pkmn]//, "icon": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png"/*,
-                /* "pv": infoPokemon.stats[0].stat.base_stats*/};
-
-            urls.push(urlTmp);
-            var requestPokemon = https.get(urls[0].url.url, (resultPokemon) => {resultPokemon.on('data', (d) => {data += d;})
-            result.on('end', function() {
-                    infoPokemon = JSON.parse(data);
-                    console.log(infoPokemon);
-                });
-            });
-            requestPokemon.on('error', (e) => {
-                console.error(e);
-        });
-
-            requestPokemon.end();
-        }
-        response.urls = urls;
         res.json(response);
     });
 });
-    requestUrls.on('error', (e) => {
+    request.on('error', (e) => {
         console.error(e);
 });
 
-    requestUrls.end();
-
+    request.end();
 }
+
+exports.pokemon = function(req, res) {
+    var idPoke = req.params.idPoke;
+    var options = "https://pokeapi.co/api/v2/pokemon/"+idPoke+"/";
+    var data = "";
+    var response = [];
+    var request = https.get(options, (result) => {
+        result.on('data', (d) => {
+        data += d;
+});
+    result.on('end', function() {
+        var infosPokemon = JSON.parse(data);
+        var customInfo = {
+            "idPoke" : infosPokemon.id,
+            "name" : infosPokemon.name,
+            "icon" : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+infosPokemon.id+".png",
+            "pv": infosPokemon.stats[5].base_stat,
+            "att": infosPokemon.stats[4].base_stat,
+            "def": infosPokemon.stats[3].base_stat,
+            "spA": infosPokemon.stats[2].base_stat,
+            "spD": infosPokemon.stats[1].base_stat,
+            "spe": infosPokemon.stats[0].base_stat
+        };
+        res.json(customInfo);
+    });
+});
+    request.on('error', (e) => {
+        console.error(e);
+});
+    request.end();
+}
+
+
+
