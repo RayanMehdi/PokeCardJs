@@ -15,12 +15,14 @@ Installation
 
 - Allez dans le dossier que vous venez de cloner
 
-- Lancer la commande "npm install" pour installer les modules Node JS (un dossier node_modules devrait apparaître dans votre projet)
+- Lancez la commande "npm install" pour installer les modules Node JS (un dossier node_modules devrait apparaître dans votre projet)
 
-- Lancer la commande "npm run start" pour démarrer le serveur
+- Lancez la commande "npm run start" pour démarrer le serveur
 
 - L'adresse pour utiliser votre webservice est localhost:3000
 
 - Installez l'apk se trouvant au l'adresse suivante sur votre téléphone Android: https://github.com/RayanMehdi/PokeCard/releases
+
+- Connectez le téléphone Android sur lequel est installé l'application au même réseau que le machine qui fait tourner le webservice
 
 - Contactez nous par mail avec votre identifiant facebook afin d'être ajouté a la liste des testeur de l'appilcation
