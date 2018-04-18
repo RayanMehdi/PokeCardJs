@@ -69,4 +69,4 @@ Une première route de type GET sans paramètre permettant de recupérer dans la
 
 Une seconde requête de type POST prenant en paramètre un id d'utilisateur et l'id de 2 pokemons afin d'ajouté un Echange dans la base de donnée.
 
-Enfin une dernière route de type POST prenant en paramète un ID d'échange ainsi qu'un ID d'utilisateur qui permettrait de procéder à l'échange.
+Enfin une dernière route de type POST prenant en paramètre un ID d'échange ainsi qu'un ID d'utilisateur qui permettrait de procéder à l'échange.
